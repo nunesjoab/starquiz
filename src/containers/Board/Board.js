@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 
 import axios from '../../axios'
+import './Board.css'
 
 class Board extends Component {
     state = {
@@ -9,15 +10,17 @@ class Board extends Component {
 
     componentDidMount() {
         axios.get('people/')
-            .then(response => {
-                console.log(response.data)
-            })
+        .then(response => {
+            console.log(response.data)
+        })
     }
 
     render () {
         return (
-            <div>
-                <h3>BOARD</h3>
+            <div className="container">
+                <section className="characters">
+                    <h3>Characters</h3>
+                </section>
             </div>
         )
     }
