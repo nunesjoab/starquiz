@@ -1,0 +1,16 @@
+.card {
+	background-color: white;
+	
+	margin: 10px;
+	padding: 10px;
+
+	border-radius: 4px;
+	width: 20%;
+}
+
+.persona img{
+		background-color: gray;
+		height: auto;
+		width: 100%;
+
+}
