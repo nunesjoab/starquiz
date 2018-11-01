@@ -7,34 +7,103 @@ import Persona from '../../components/Persona/Persona';
 
 class Board extends Component {
     state = {
-        people: []
+        people: [],
+        selectedPersonaId: null,
+        nextPage: null,
+        previousPage: null
     }
 
     componentDidMount() {
         axios.get('people/')
         .then(response => {
-            //console.log(response.data)
-            const people = response.data.results.map(people => {
+            const nextPage = response.data.next
+            const previousPage = response.data.previous
+            let people = response.data.results.map((element, index) => {
+                element.id = index+1
                 return {
-                    ...people
+                    ...element
                 }
             })
-            this.setState({ people })
-            console.log(people)
+            // console.log(people)
+            this.setState({
+                people,
+                nextPage,
+                previousPage
+            })
         })
     }
 
+    
+    getPreviousPeopleHandler = (page) => {
+        if (this.state.nextPage) {
+            axios.get(this.state.previousPage)
+                .then(response => {
+                    const nextPage = response.data.next
+                    const previousPage = response.data.previous
+                    let people = response.data.results.map((element, index) => {
+                        element.id = index + 1
+                        return {
+                            ...element
+                        }
+                    })
+                    // console.log(people)
+                    this.setState({
+                        people,
+                        nextPage,
+                        previousPage
+                    })
+                })
+        }
+        // console.log('next')
+    }
+
+    getNextPeopleHandler = (page) => {
+        if (this.state.nextPage) {
+            axios.get(this.state.nextPage)
+            .then(response => {
+                const nextPage = response.data.next
+                const previousPage = response.data.previous
+                let people = response.data.results.map((element, index) => {
+                    element.id = index + 1
+                    return {
+                        ...element
+                    }
+                })
+                // console.log(people)
+                this.setState({
+                    people,
+                    nextPage,
+                    previousPage
+                })
+            })
+        }
+        // console.log('next')
+    }
+
     render () {
+        let people = <p style={{ textAlign: 'center' }}>Something got wrong!!</p>
+        
+        if (this.state.people) {
+            people = this.state.people.map(persona => {
+                return (
+                    < Persona
+                        key={persona.id}
+                        name={persona.name}
+                    />
+                )
+            })
+        }
+
         return (
             <div className="container">
-                <h3>Characters</h3>
+                <h1 className="">Characters</h1>
                 
                 <section className="characters">
-                    <Persona />
-                    <Persona />
-                    <Persona />
-                    <Persona />
+                    {people}
                 </section>
+
+                <button onClick={this.getPreviousPeopleHandler}>Previous Page</button>
+                <button onClick={this.getNextPeopleHandler}>Next Page</button>
             </div>
         )
     }
