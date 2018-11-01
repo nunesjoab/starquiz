@@ -3,14 +3,19 @@ import React, {Component} from 'react'
 import axios from '../../axios'
 import './Board.css'
 
-import Persona from '../../components/Persona/Persona';
+import Persona from '../../components/Persona/Persona'
+import Aux from '../../hoc/Aux/Aux'
+import Modal from '../../components/UI/Modal/Modal'
 
 class Board extends Component {
     state = {
         people: [],
         selectedPersonaId: null,
         nextPage: null,
-        previousPage: null
+        previousPage: null,
+        showHints: null,
+        takeShot: null
+
     }
 
     componentDidMount() {
@@ -95,16 +100,21 @@ class Board extends Component {
         }
 
         return (
-            <div className="container">
-                <h1 className="title">Characters</h1>
-                
-                <section className="characters">
-                    {people}
-                </section>
+            <Aux>
+                <Modal>
 
-                <button onClick={this.getPreviousPeopleHandler} className={!this.state.previousPage ? 'disabled' : ''}>Previous Page</button>
-                <button onClick={this.getNextPeopleHandler} className={!this.state.nextPage ? 'disabled' : ''}>Next Page</button>
-            </div>
+                </Modal>
+                <div className="container">
+                    <h1 className="title">Characters</h1>
+                    
+                    <section className="characters">
+                        {people}
+                    </section>
+
+                    <button onClick={this.getPreviousPeopleHandler} className={!this.state.previousPage ? 'disabled' : ''}>Previous Page</button>
+                    <button onClick={this.getNextPeopleHandler} className={!this.state.nextPage ? 'disabled' : ''}>Next Page</button>
+                </div>
+            </Aux>
         )
     }
 }
