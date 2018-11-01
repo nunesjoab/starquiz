@@ -35,7 +35,7 @@ class Board extends Component {
 
     
     getPreviousPeopleHandler = (page) => {
-        if (this.state.nextPage) {
+        if (this.state.previousPage) {
             axios.get(this.state.previousPage)
                 .then(response => {
                     const nextPage = response.data.next
@@ -96,14 +96,14 @@ class Board extends Component {
 
         return (
             <div className="container">
-                <h1 className="">Characters</h1>
+                <h1 className="title">Characters</h1>
                 
                 <section className="characters">
                     {people}
                 </section>
 
-                <button onClick={this.getPreviousPeopleHandler}>Previous Page</button>
-                <button onClick={this.getNextPeopleHandler}>Next Page</button>
+                <button onClick={this.getPreviousPeopleHandler} className={!this.state.previousPage ? 'disabled' : ''}>Previous Page</button>
+                <button onClick={this.getNextPeopleHandler} className={!this.state.nextPage ? 'disabled' : ''}>Next Page</button>
             </div>
         )
     }

@@ -1,14 +1,50 @@
-.container {
-    width: 95%;
-    margin: auto;
+.App {
+    background-color: darkslategrey;
+    padding: 2.5% 4%; 
+}
 
+.container {
+    margin: auto;
+    padding: 24px 0;
+
+    border-radius: 4px;
     background-color: aquamarine;
     text-align: center;
     text-transform: uppercase;
+}
+
+.title {
+    margin-top: 0;
+    margin-bottom: 24px;
 }
 
 .characters {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
+}
+
+button {
+    padding: 8px 12px;
+    margin: 4px;
+    
+    background-color: cornflowerblue;
+    border: 0;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    outline: 0;
+}
+
+button:hover {
+    background-color: midnightblue;
+}
+
+button.disabled {
+    background-color: gray;
+    color: lightgray;
+    cursor: not-allowed;
 }
