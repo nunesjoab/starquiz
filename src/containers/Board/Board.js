@@ -3,14 +3,24 @@ import React, {Component} from 'react'
 import axios from '../../axios'
 import './Board.css'
 
-import Persona from '../../components/Persona/Persona';
+import Persona from '../../components/Persona/Persona'
+import Aux from '../../hoc/Auxiliar/Auxiliar'
+//import Modal from '../../components/UI/Modal/Modal';
 
 class Board extends Component {
-    state = {
-        people: [],
-        selectedPersonaId: null,
-        nextPage: null,
-        previousPage: null
+    constructor(props) {
+        super(props)
+        this.state = {
+            people: [],
+            selectedPersonaId: null,
+            nextPage: null,
+            previousPage: null,
+            showModal: false,
+            clickedId: null,
+            //showHints: null,
+            //takeShot: null
+
+        }
     }
 
     componentDidMount() {
@@ -32,7 +42,6 @@ class Board extends Component {
             })
         })
     }
-
     
     getPreviousPeopleHandler = (page) => {
         if (this.state.previousPage) {
@@ -57,7 +66,7 @@ class Board extends Component {
         // console.log('next')
     }
 
-    getNextPeopleHandler = (page) => {
+    getNextPeopleHandler = () => {
         if (this.state.nextPage) {
             axios.get(this.state.nextPage)
             .then(response => {
@@ -80,31 +89,51 @@ class Board extends Component {
         // console.log('next')
     }
 
-    render () {
+    showHintModalHandler = () => {
+        console.log('SHOW HINT MODALL')
+        this.setState({ showModal: true })
+    }
+
+    showGuessModalHandler = () => {
+        console.log('SHOW GUESS MODALL')
+        this.setState({ showModal: true })
+    }
+
+    renderPeople() {
         let people = <p style={{ textAlign: 'center' }}>Something got wrong!!</p>
-        
+
         if (this.state.people) {
             people = this.state.people.map(persona => {
                 return (
                     < Persona
                         key={persona.id}
+                        id={persona.id}
                         name={persona.name}
+                        showHintModal={this.showHintModalHandler}
+                        showGuessModal={this.showGuessModalHandler}
                     />
                 )
             })
         }
 
-        return (
-            <div className="container">
-                <h1 className="title">Characters</h1>
-                
-                <section className="characters">
-                    {people}
-                </section>
+        return people
+    }
 
-                <button onClick={this.getPreviousPeopleHandler} className={!this.state.previousPage ? 'disabled' : ''}>Previous Page</button>
-                <button onClick={this.getNextPeopleHandler} className={!this.state.nextPage ? 'disabled' : ''}>Next Page</button>
-            </div>
+    render () {
+        return (
+            <Aux>
+                
+                <div className="container">
+                    <h1 className="title">Characters</h1>
+                    
+                    <section className="characters">
+                        {this.renderPeople()}
+                    </section>
+
+                    <button onClick={this.getPreviousPeopleHandler} className={!this.state.previousPage ? 'disabled' : ''}>Previous Page</button>
+                    <button onClick={this.getNextPeopleHandler} className={!this.state.nextPage ? 'disabled' : ''}>Next Page</button>
+                </div>
+            </Aux>
         )
     }
 }
