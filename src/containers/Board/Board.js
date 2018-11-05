@@ -1,21 +1,24 @@
 import React, {Component} from 'react'
 
 import axios from '../../axios'
-import './Board.css'
 
 import Persona from '../../components/Persona/Persona'
 import Aux from '../../hoc/Auxiliar/Auxiliar'
-import Modal from '../../components/UI/Modal/Modal'
+
+import './Board.css'
 
 class Board extends Component {
-    state = {
-        people: [],
-        selectedPersonaId: null,
-        nextPage: null,
-        previousPage: null,
-        showHints: null,
-        takeShot: null
+    constructor(props) {
+        super(props)
+        this.state = {
+            people: [],
+            selectedPersonaId: null,
+            nextPage: null,
+            previousPage: null,
+            playGame: false,
+            clickedId: null,
 
+        }
     }
 
     componentDidMount() {
@@ -23,13 +26,14 @@ class Board extends Component {
         .then(response => {
             const nextPage = response.data.next
             const previousPage = response.data.previous
-            let people = response.data.results.map((element, index) => {
-                element.id = index+1
+
+            let people = response.data.results.map(element => {
+                element.id = element.url.split('/')[5]
                 return {
                     ...element
                 }
             })
-            // console.log(people)
+
             this.setState({
                 people,
                 nextPage,
@@ -38,43 +42,26 @@ class Board extends Component {
         })
     }
 
+    startGame = () => {
+        this.setState({
+            playGame: true
+        })
+    }
     
-    getPreviousPeopleHandler = (page) => {
+    getPreviousPeopleHandler = () => {
         if (this.state.previousPage) {
             axios.get(this.state.previousPage)
-                .then(response => {
-                    const nextPage = response.data.next
-                    const previousPage = response.data.previous
-                    let people = response.data.results.map((element, index) => {
-                        element.id = index + 1
-                        return {
-                            ...element
-                        }
-                    })
-                    // console.log(people)
-                    this.setState({
-                        people,
-                        nextPage,
-                        previousPage
-                    })
-                })
-        }
-        // console.log('next')
-    }
-
-    getNextPeopleHandler = (page) => {
-        if (this.state.nextPage) {
-            axios.get(this.state.nextPage)
             .then(response => {
                 const nextPage = response.data.next
                 const previousPage = response.data.previous
-                let people = response.data.results.map((element, index) => {
-                    element.id = index + 1
+                let people = response.data.results.map(element => {
+                    element.id = element.url.split('/')[5]
                     return {
                         ...element
                     }
                 })
-                // console.log(people)
+                //console.log(people)
+
                 this.setState({
                     people,
                     nextPage,
@@ -82,40 +69,101 @@ class Board extends Component {
                 })
             })
         }
-        // console.log('next')
     }
 
-    render () {
+    getNextPeopleHandler = () => {
+        if (this.state.nextPage) {
+            axios.get(this.state.nextPage)
+            .then(response => {
+                const nextPage = response.data.next
+                const previousPage = response.data.previous
+                let people = response.data.results.map(element => {
+                    element.id = element.url.split('/')[5]
+                    return {
+                        ...element
+                    }
+                })
+                //console.log(people)
+
+                this.setState({
+                    people,
+                    nextPage,
+                    previousPage
+                })
+            })
+        }
+    }
+
+    renderPeople() {
         let people = <p style={{ textAlign: 'center' }}>Something got wrong!!</p>
-        
+
         if (this.state.people) {
-            people = this.state.people.map(persona => {
+            people = this.state.people.map((persona, index) => {
                 return (
                     < Persona
                         key={persona.id}
-                        name={persona.name}
+                        id={persona.id}
+                        name={persona.name.toLowerCase()}
+                        hair={persona.hair_color}
+                        height={persona.height}
+                        planetUrl={persona.homeworld}
+                        filmsArray={persona.films}
+                        vehiclesArray={persona.vehicles}
                     />
                 )
             })
         }
 
-        return (
-            <Aux>
-                <Modal>
+        return people
+    }
 
-                </Modal>
-                <div className="container">
-                    <h1 className="title">Characters</h1>
-                    
-                    <section className="characters">
-                        {people}
-                    </section>
+    render () {
+        if (!this.state.playGame) {
+            return (
+                <Aux>
+                    <div className="container">
+                        <h1
+                            className="title"
+                            style={{
+                                color: '#fff',
+                                letterSpacing: '2px',
+                            }}
+                        >
+                            StarQuiz
+                        </h1>
+                        <img src="cover.jpeg" alt="Let's play"></img>
+                        <div>
+                            <button
+                                style={{
+                                    marginTop: '24px',
+                                    padding: '24px 40px',
+                                    fontSize: '24px',
+                                    fontWeight: '600',
+                                }}
+                                onClick={this.startGame}
+                            >
+                                Jogar
+                            </button>
+                        </div>
+                    </div>
+                </Aux>
+            )
+        } else {
+            return (
+                <Aux>                    
+                    <div className="container">
+                        <h1 className="title">Personagens</h1>
+                        
+                        <section className="characters">
+                            {this.renderPeople()}
+                        </section>
 
-                    <button onClick={this.getPreviousPeopleHandler} className={!this.state.previousPage ? 'disabled' : ''}>Previous Page</button>
-                    <button onClick={this.getNextPeopleHandler} className={!this.state.nextPage ? 'disabled' : ''}>Next Page</button>
-                </div>
-            </Aux>
-        )
+                        <button onClick={this.getPreviousPeopleHandler} className={!this.state.previousPage ? 'disabled' : ''}>Anterior</button>
+                        <button onClick={this.getNextPeopleHandler} className={!this.state.nextPage ? 'disabled' : ''}>Próxima</button>
+                    </div>
+                </Aux>
+            )
+        }
     }
 }
 
