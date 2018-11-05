@@ -4,7 +4,7 @@ import axios from '../../axios'
 import './Board.css'
 
 import Persona from '../../components/Persona/Persona'
-import Aux from '../../hoc/Aux/Aux'
+import Aux from '../../hoc/Auxiliar/Auxiliar'
 import Modal from '../../components/UI/Modal/Modal'
 
 class Board extends Component {

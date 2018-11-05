@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import './Modal.css'
 
-import Aux from '../../../hoc/Aux/Aux'
+import Aux from '../../../hoc/Auxiliar/Auxiliar'
 
 export default class Modal extends Component {
 	render() {
