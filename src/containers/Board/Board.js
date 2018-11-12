@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, {Component} from 'react'
 
 import axios from '../../axios'
@@ -172,3 +173,4 @@ class Board extends Component {
 }
 
 export default Board
+
