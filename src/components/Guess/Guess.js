@@ -19,8 +19,11 @@ export default class Guess extends Component {
 	}
 
 	checkAnswer = () => {
-		const inputValue = this.state.input
-		this.props.inputValue(inputValue)
+		if (this.state.input !== '') {
+			const inputValue = this.state.input
+			this.props.inputValue(inputValue)
+			this.props.invalid(this.props.personaId)
+		}
 	}
 
 	renderBackButton() {

@@ -17,22 +17,59 @@ class Board extends Component {
             previousPage: null,
             playGame: false,
             clickedId: null,
+            invalidPersona: [],
 
         }
     }
 
     componentDidMount() {
         axios.get('people/')
+            .then(response => {
+                const nextPage = response.data.next
+                const previousPage = response.data.previous
+
+                let people = response.data.results.map(element => {
+                    element.id = element.url.split('/')[5]
+                    return {
+                        ...element
+                    }
+                })
+
+                this.setState({
+                    people,
+                    nextPage,
+                    previousPage
+                })
+            })
+    }
+
+
+    startGame = () => {
+        this.setState({
+            playGame: true
+        })
+    }
+
+    setInvalidId = (value) => {
+        let invalidPersona = this.state.invalidPersona.slice()
+        invalidPersona.push(value)
+        if (!this.state.invalidPersona.includes(value)) {
+            this.setState({ invalidPersona })
+        }
+    }
+
+    getPeopleHandler = (anotherPage) => {
+        axios.get(anotherPage)
         .then(response => {
             const nextPage = response.data.next
             const previousPage = response.data.previous
-
             let people = response.data.results.map(element => {
                 element.id = element.url.split('/')[5]
                 return {
                     ...element
                 }
             })
+            //console.log(people)
 
             this.setState({
                 people,
@@ -41,76 +78,43 @@ class Board extends Component {
             })
         })
     }
-
-    startGame = () => {
-        this.setState({
-            playGame: true
-        })
-    }
     
-    getPreviousPeopleHandler = () => {
-        if (this.state.previousPage) {
-            axios.get(this.state.previousPage)
-            .then(response => {
-                const nextPage = response.data.next
-                const previousPage = response.data.previous
-                let people = response.data.results.map(element => {
-                    element.id = element.url.split('/')[5]
-                    return {
-                        ...element
-                    }
-                })
-                //console.log(people)
-
-                this.setState({
-                    people,
-                    nextPage,
-                    previousPage
-                })
-            })
-        }
-    }
-
-    getNextPeopleHandler = () => {
-        if (this.state.nextPage) {
-            axios.get(this.state.nextPage)
-            .then(response => {
-                const nextPage = response.data.next
-                const previousPage = response.data.previous
-                let people = response.data.results.map(element => {
-                    element.id = element.url.split('/')[5]
-                    return {
-                        ...element
-                    }
-                })
-                //console.log(people)
-
-                this.setState({
-                    people,
-                    nextPage,
-                    previousPage
-                })
-            })
-        }
-    }
-
     renderPeople() {
         let people = <p style={{ textAlign: 'center' }}>Something got wrong!!</p>
 
         if (this.state.people) {
             people = this.state.people.map((persona, index) => {
-                return (
-                    < Persona
-                        key={persona.id}
-                        id={persona.id}
-                        name={persona.name.toLowerCase()}
-                        hair={persona.hair_color}
-                        height={persona.height}
-                        planetUrl={persona.homeworld}
-                        filmsArray={persona.films}
-                        vehiclesArray={persona.vehicles}
-                    />
-                )
+                if (!this.state.invalidPersona.includes( persona.id ) ) {
+                    return (
+                        < Persona
+                            key={persona.id}
+                            id={persona.id}
+                            name={persona.name.toLowerCase()}
+                            hair={persona.hair_color}
+                            height={persona.height}
+                            planetUrl={persona.homeworld}
+                            filmsArray={persona.films}
+                            vehiclesArray={persona.vehicles}
+                            invalidId={this.setInvalidId}
+                            negate={false}
+                        />
+                    )
+                } else {
+                    return (
+                        < Persona
+                            key={persona.id}
+                            id={persona.id}
+                            name={persona.name.toLowerCase()}
+                            hair={persona.hair_color}
+                            height={persona.height}
+                            planetUrl={persona.homeworld}
+                            filmsArray={persona.films}
+                            vehiclesArray={persona.vehicles}
+                            invalidId={this.setInvalidId}
+                            negate={true}
+                        />
+                    )
+                }
             })
         }
 
@@ -158,8 +162,8 @@ class Board extends Component {
                             {this.renderPeople()}
                         </section>
 
-                        <button onClick={this.getPreviousPeopleHandler} className={!this.state.previousPage ? 'disabled' : ''}>Anterior</button>
-                        <button onClick={this.getNextPeopleHandler} className={!this.state.nextPage ? 'disabled' : ''}>Próxima</button>
+                        <button onClick={() => this.getPeopleHandler(this.state.previousPage)} className={!this.state.previousPage ? 'disabled' : ''}>Anterior</button>
+                        <button onClick={() => this.getPeopleHandler(this.state.nextPage)} className={!this.state.nextPage ? 'disabled' : ''}>Próxima</button>
                     </div>
                 </Aux>
             )

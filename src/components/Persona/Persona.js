@@ -17,7 +17,7 @@ export default class Persona extends Component {
             fullPoints: true,
             films: null,
             input: null,
-            invalid: false,
+            invalid: this.props.negate,
             planet: null,
             showGuess: false,
             showHint: false,
@@ -82,7 +82,7 @@ export default class Persona extends Component {
     }
 
     getInputValue = (value) => {
-        this.setState({    input: value })
+        this.setState({ input: value })
 
         if (this.props.name === value) {
             this.setState({ trueAnswer: true })
@@ -119,9 +119,11 @@ export default class Persona extends Component {
             return (
                 <Aux>
                     <Guess
+                        personaId={this.props.id}
                         name={this.props.name}
                         closeGuess={this.showGuessToggle}
                         inputValue={this.getInputValue}
+                        invalid={this.props.invalidId}
                     />                   
                 </Aux>
             )
