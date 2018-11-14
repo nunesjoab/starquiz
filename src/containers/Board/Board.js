@@ -24,23 +24,23 @@ class Board extends Component {
 
     componentDidMount() {
         axios.get('people/')
-            .then(response => {
-                const nextPage = response.data.next
-                const previousPage = response.data.previous
+        .then(response => {
+            const nextPage = response.data.next
+            const previousPage = response.data.previous
 
-                let people = response.data.results.map(element => {
-                    element.id = element.url.split('/')[5]
-                    return {
-                        ...element
-                    }
-                })
-
-                this.setState({
-                    people,
-                    nextPage,
-                    previousPage
-                })
+            let people = response.data.results.map(element => {
+                element.id = element.url.split('/')[5]
+                return {
+                    ...element
+                }
             })
+
+            this.setState({
+                people,
+                nextPage,
+                previousPage
+            })
+        })
     }
 
 

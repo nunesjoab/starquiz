@@ -6,8 +6,8 @@ import Flip from 'react-reveal/Flip'
 import './Persona.css'
 
 import Aux from '../../hoc/Auxiliar/Auxiliar'
-import Hint from '../Hint/Hint';
-import Guess from '../Guess/Guess';
+import Hint from '../Hint/Hint'
+import Guess from '../Guess/Guess'
 
 
 export default class Persona extends Component {
@@ -84,15 +84,28 @@ export default class Persona extends Component {
     getInputValue = (value) => {
         this.setState({ input: value })
 
-        if (this.props.name === value) {
-            this.setState({ trueAnswer: true })
-        }
+        let points = localStorage.getItem('score')
         
+        console.log(points)
+
         if (value !== '') {
-            this.setState({    invalid: true })
+            this.setState({ invalid: true })
         }
-        
-        console.log('input in Persona  ' + this.state.input)
+
+
+        if (this.props.name === value) {
+
+            this.setState({ trueAnswer: true })
+
+
+            if (this.state.fullPoints) {
+                points = {'score' : points + 1}
+            } else {
+                points = {'score': points + .5}
+            }
+            
+            localStorage.setItem('points', JSON.stringify(points))
+        }
     }
 
     renderHintContainer() {

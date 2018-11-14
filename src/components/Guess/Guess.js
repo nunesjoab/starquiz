@@ -14,11 +14,11 @@ export default class Guess extends Component {
 	}
 
 	componentWillUnmount() {
-		console.log('Will Unmount')
 		this.checkAnswer()
 	}
 
 	checkAnswer = () => {
+		
 		if (this.state.input !== '') {
 			const inputValue = this.state.input
 			this.props.inputValue(inputValue)
@@ -34,21 +34,15 @@ export default class Guess extends Component {
 			>
 				Voltar
 			</button>
-
 			)
 		}
 	}
-	// checkAnswer = () => {
-	// 	if(this.state.input !== '') {
-	// 		if (this.state.input === this.props.name) {
-	// 			console.log('Right answer!!')
-	// 		}
-	// 		this.sendInputToParentComponent()
-	// 	}
-	// 	this.props.closeGuess()
-	// }
 
   	render() {
+
+		let points = { 'score': 0 }
+		localStorage.setItem('points', JSON.stringify(points))
+
 		return (
 			<div className="modal">
 				<Fade left>
