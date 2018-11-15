@@ -18,7 +18,6 @@ export default class Guess extends Component {
 	}
 
 	checkAnswer = () => {
-		
 		if (this.state.input !== '') {
 			const inputValue = this.state.input
 			this.props.inputValue(inputValue)
@@ -39,10 +38,6 @@ export default class Guess extends Component {
 	}
 
   	render() {
-
-		let points = { 'score': 0 }
-		localStorage.setItem('points', JSON.stringify(points))
-
 		return (
 			<div className="modal">
 				<Fade left>

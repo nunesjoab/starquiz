@@ -10,6 +10,8 @@ import './Board.css'
 class Board extends Component {
     constructor(props) {
         super(props)
+        this.startTimer = this.startTimer.bind(this)
+
         this.state = {
             people: [],
             selectedPersonaId: null,
@@ -18,7 +20,7 @@ class Board extends Component {
             playGame: false,
             clickedId: null,
             invalidPersona: [],
-
+            time: 120,
         }
     }
 
@@ -45,9 +47,20 @@ class Board extends Component {
 
 
     startGame = () => {
+        localStorage.clear()
+        const points = {'points' : 0}
+        localStorage.setItem('points', JSON.stringify(points))
+
         this.setState({
             playGame: true
         })
+    }
+
+    startTimer = () => {
+        this.timer = setInterval(() => this.setState({
+            time: this.state.time - 1
+        }), 1000)
+        console.log('Time is running!')
     }
 
     setInvalidId = (value) => {
@@ -145,6 +158,7 @@ class Board extends Component {
                                     fontWeight: '600',
                                 }}
                                 onClick={this.startGame}
+                                onMouseUp={() => this.startTimer()}
                             >
                                 Jogar
                             </button>
@@ -161,9 +175,28 @@ class Board extends Component {
                         <section className="characters">
                             {this.renderPeople()}
                         </section>
+                        <div className="timer-wrapper">
+                            {this.state.time}
+                        </div>
+                        {
+                            this.state.previousPage ?
+                                <button
+                                    onClick={() => this.getPeopleHandler(this.state.previousPage)}
+                                >
+                                    Anterior
+                                </button> :
+                                ``
+                        }
+                        {
+                            this.state.nextPage ?
 
-                        <button onClick={() => this.getPeopleHandler(this.state.previousPage)} className={!this.state.previousPage ? 'disabled' : ''}>Anterior</button>
-                        <button onClick={() => this.getPeopleHandler(this.state.nextPage)} className={!this.state.nextPage ? 'disabled' : ''}>Próxima</button>
+                                <button
+                                    onClick={() => this.getPeopleHandler(this.state.nextPage)}
+                                >
+                                    Próxima
+                                </button> :
+                                ``
+                        }
                     </div>
                 </Aux>
             )
