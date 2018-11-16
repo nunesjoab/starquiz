@@ -23,7 +23,10 @@
 
 .timer-wrapper {
     background-color: rgba(255, 255, 255, .7);
+    font-family: 'Source Code Pro', monospace;
+    font-weight: bold;
     height: 100px;
+    padding: 16px; 
     position: fixed;
     right: 0;
     top: 0;

@@ -57,10 +57,11 @@ class Board extends Component {
     }
 
     startTimer = () => {
-        this.timer = setInterval(() => this.setState({
-            time: this.state.time - 1
-        }), 1000)
-        console.log('Time is running!')
+        if (this.state.time > 0) {
+            this.timer = setInterval(() => this.setState((prevState) => {
+                return { time: prevState.time - 1 }
+            }), 1000)
+        }
     }
 
     setInvalidId = (value) => {
@@ -167,39 +168,46 @@ class Board extends Component {
                 </Aux>
             )
         } else {
-            return (
-                <Aux>                    
-                    <div className="container">
-                        <h1 className="title">Personagens</h1>
-                        
-                        <section className="characters">
-                            {this.renderPeople()}
-                        </section>
-                        <div className="timer-wrapper">
-                            {this.state.time}
-                        </div>
-                        {
-                            this.state.previousPage ?
-                                <button
-                                    onClick={() => this.getPeopleHandler(this.state.previousPage)}
-                                >
-                                    Anterior
-                                </button> :
-                                ``
-                        }
-                        {
-                            this.state.nextPage ?
+            if (this.state.time > 0) {
+                return (
+                    <Aux>                    
+                        <div className="container">
+                            <h1 className="title">Personagens</h1>
+                            
+                            <section className="characters">
+                                {this.renderPeople()}
+                            </section>
 
-                                <button
-                                    onClick={() => this.getPeopleHandler(this.state.nextPage)}
-                                >
-                                    Próxima
-                                </button> :
-                                ``
-                        }
-                    </div>
-                </Aux>
-            )
+                            <div className="timer-wrapper">
+                                <span>{Math.floor(this.state.time / 60)}</span>:<span>{Math.floor(this.state.time % 60)}</span>
+                            </div>
+                            {
+                                this.state.previousPage ?
+                                    <button
+                                        onClick={() => this.getPeopleHandler(this.state.previousPage)}
+                                    >
+                                        Anterior
+                                    </button> :
+                                    ``
+                            }
+                            {
+                                this.state.nextPage ?
+
+                                    <button
+                                        onClick={() => this.getPeopleHandler(this.state.nextPage)}
+                                    >
+                                        Próxima
+                                    </button> :
+                                    ``
+                            }
+                        </div>
+                    </Aux>
+                )
+            } else {
+                return (
+                    <h1>TIME FINISHED!</h1>
+                )
+            }
         }
     }
 }
