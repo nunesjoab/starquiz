@@ -6,8 +6,6 @@ import './Guess.css'
 export default class Guess extends Component {
 	constructor(props) {
 		super(props)
-		// this.backButton = React.createRef()
-		// this.disableBackButton = this.disableBackButton.bind(this)
 		this.state = {
 			input: '',
 		}

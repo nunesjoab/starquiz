@@ -26,7 +26,7 @@ export default class Persona extends Component {
         }
     }
 
-    componentDidMount() {
+    getPersonaDetails = () => {
         let planet= []
         let films = []
         let vehicles = []
@@ -155,8 +155,18 @@ export default class Persona extends Component {
                     <div className="card">
                         <div className="persona">
                             <img src="favicon.png" alt="" />
-                            <button className={this.state.invalid ? 'disabled' : ''} type="button" onMouseUp={this.showHintToggle}>Dicas</button>
-                            <button className={this.state.invalid ? 'disabled' : ''} type="button" onMouseUp={this.showGuessToggle}>Responder</button>
+                            {
+                                this.state.invalid ?
+                                    <button className="disabled" type="button" disabled>Dicas</button>
+                                :
+                                    <button type="button" onClick={() => this.getPersonaDetails()} onMouseUp={this.showHintToggle}>Dicas</button>
+                            }
+                            {
+                                this.state.invalid ?
+                                    <button className="disabled" type="button" disabled>Responder</button>
+                                :
+                                    <button type="button" onMouseUp={this.showGuessToggle}>Responder</button>
+                            }
                         </div>
                     </div>
                 </Flip>

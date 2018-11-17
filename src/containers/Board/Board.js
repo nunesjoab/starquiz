@@ -20,7 +20,7 @@ class Board extends Component {
             playGame: false,
             clickedId: null,
             invalidPersona: [],
-            time: 120,
+            time: 30,
         }
     }
 
@@ -45,7 +45,6 @@ class Board extends Component {
         })
     }
 
-
     startGame = () => {
         localStorage.clear()
         const points = {'points' : 0}
@@ -57,11 +56,9 @@ class Board extends Component {
     }
 
     startTimer = () => {
-        if (this.state.time > 0) {
-            this.timer = setInterval(() => this.setState((prevState) => {
-                return { time: prevState.time - 1 }
-            }), 1000)
-        }
+        this.timer = setInterval(() => this.setState((prevState) => {
+            return { time: prevState.time - 1 }
+        }), 1000)
     }
 
     setInvalidId = (value) => {
@@ -135,6 +132,20 @@ class Board extends Component {
         return people
     }
 
+    getScore = () => {
+        const score = JSON.parse(localStorage.getItem('points'))
+        const points = score.points*10;
+        return (
+            <div className="container">
+                <h1 className="title">Time Finished!</h1>
+                <h3>Sua pontuação foi:</h3>
+                {
+                    points
+                }
+            </div>
+        )
+    }
+
     render () {
         if (!this.state.playGame) {
             return (
@@ -183,29 +194,32 @@ class Board extends Component {
                             </div>
                             {
                                 this.state.previousPage ?
-                                    <button
-                                        onClick={() => this.getPeopleHandler(this.state.previousPage)}
-                                    >
+                                    <button onClick={() => this.getPeopleHandler(this.state.previousPage)} >
                                         Anterior
-                                    </button> :
-                                    ``
+                                    </button>
+                                    :
+                                    <button className="disabled" disabled>
+                                        Anterior
+                                    </button>
                             }
                             {
                                 this.state.nextPage ?
-
-                                    <button
-                                        onClick={() => this.getPeopleHandler(this.state.nextPage)}
-                                    >
+                                    <button onClick={() => this.getPeopleHandler(this.state.nextPage)} >
                                         Próxima
-                                    </button> :
-                                    ``
+                                    </button>
+                                    :
+                                    <button className="disabled" disabled>
+                                        Próxima
+                                    </button>
                             }
                         </div>
                     </Aux>
                 )
             } else {
                 return (
-                    <h1>TIME FINISHED!</h1>
+                    <Aux>
+                        {this.getScore()}
+                    </Aux>
                 )
             }
         }
