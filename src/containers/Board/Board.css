@@ -22,17 +22,23 @@
 }
 
 .timer-wrapper {
-    background-color: rgba(255, 255, 255, .7);
-    border: 8px solid gold;
+    background-color: rgba(255, 0, 0, .7);
     font-family: 'Source Code Pro', monospace;
     font-size: 42px;
     font-weight: 600;
     letter-spacing: 2px;
+
     padding: 16px; 
     position: fixed;
     right: 0;
     top: 0;
     width: 180px
+}
+
+.timer-wrapper span {
+    background-color: black; 
+    color: white;
+    padding: 4px;            
 }
 
 .characters {
@@ -44,7 +50,6 @@
 button {
     padding: 8px 12px;
     margin: 4px;
-    
     background-color: gold;
     border: 0;
     border-radius: 4px;

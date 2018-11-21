@@ -4,6 +4,8 @@ import axios from '../../axios'
 
 import Persona from '../../components/Persona/Persona'
 import Aux from '../../hoc/Auxiliar/Auxiliar'
+import Score from '../../components/Score/Score'
+import FrontPage from '../../components/FrontPage/FrontPage'
 
 import './Board.css'
 
@@ -13,18 +15,25 @@ class Board extends Component {
         this.startTimer = this.startTimer.bind(this)
 
         this.state = {
+            playGame: false,
+            playerId: 0, 
+            time: 0,
             people: [],
             selectedPersonaId: null,
             nextPage: null,
             previousPage: null,
-            playGame: false,
             clickedId: null,
             invalidPersona: [],
-            time: 30,
         }
     }
 
     componentDidMount() {
+        localStorage.clear()
+        const score = { 'points': 0 }
+        let points = []
+        points.push(score)
+        localStorage.setItem(this.state.playerId, JSON.stringify(points))
+
         axios.get('people/')
         .then(response => {
             const nextPage = response.data.next
@@ -46,16 +55,29 @@ class Board extends Component {
     }
 
     startGame = () => {
-        localStorage.clear()
-        const points = {'points' : 0}
-        localStorage.setItem('points', JSON.stringify(points))
+        this.setState((prevState) => {
+            return {
+                playGame: !prevState.playGame,
+            }
+        })
+    }
 
-        this.setState({
-            playGame: true
+    restartGame = () => {
+
+        this.setState((prevState) => {
+            return {
+                playGame: !prevState.playGame,
+                playerId: prevState.playerId + 1,
+                invalidPersona: []
+            }
         })
     }
 
     startTimer = () => {
+        this.setState({ time: 20 })
+
+        clearInterval(this.timer)
+
         this.timer = setInterval(() => this.setState((prevState) => {
             return { time: prevState.time - 1 }
         }), 1000)
@@ -99,6 +121,7 @@ class Board extends Component {
                     return (
                         < Persona
                             key={persona.id}
+                            player={this.state.playerId}
                             id={persona.id}
                             name={persona.name.toLowerCase()}
                             hair={persona.hair_color}
@@ -114,6 +137,7 @@ class Board extends Component {
                     return (
                         < Persona
                             key={persona.id}
+                            player={this.state.playerId}
                             id={persona.id}
                             name={persona.name.toLowerCase()}
                             hair={persona.hair_color}
@@ -132,57 +156,21 @@ class Board extends Component {
         return people
     }
 
-    getScore = () => {
-        const score = JSON.parse(localStorage.getItem('points'))
-        const points = score.points*10;
-        return (
-            <div className="container">
-                <h1 className="title">Time Finished!</h1>
-                <h3>Sua pontuação foi:</h3>
-                {
-                    points
-                }
-            </div>
-        )
-    }
-
     render () {
         if (!this.state.playGame) {
             return (
                 <Aux>
-                    <div className="container">
-                        <h1
-                            className="title"
-                            style={{
-                                color: '#fff',
-                                letterSpacing: '2px',
-                            }}
-                        >
-                            StarQuiz
-                        </h1>
-                        <img src="cover.jpeg" alt="Let's play"></img>
-                        <div>
-                            <button
-                                style={{
-                                    marginTop: '24px',
-                                    padding: '24px 40px',
-                                    fontSize: '24px',
-                                    fontWeight: '600',
-                                }}
-                                onClick={this.startGame}
-                                onMouseUp={() => this.startTimer()}
-                            >
-                                Jogar
-                            </button>
-                        </div>
-                    </div>
+                    <FrontPage
+                        startGame={this.startGame}
+                        startTimer={this.startTimer}
+                    />
                 </Aux>
             )
         } else {
             if (this.state.time > 0) {
                 return (
                     <Aux>                    
-                        <div className="container">
+                        <div className="container board">
                             <h1 className="title">Personagens</h1>
                             
                             <section className="characters">
@@ -190,7 +178,17 @@ class Board extends Component {
                             </section>
 
                             <div className="timer-wrapper">
-                                <span>{Math.floor(this.state.time / 60)}</span>:<span>{Math.floor(this.state.time % 60)}</span>
+                                <span>
+                                    {
+                                        "0" + Math.floor(this.state.time / 60)
+                                    }
+                                </span>
+                                :
+                                <span>
+                                    {
+                                        Math.floor(this.state.time % 60) < 10 ? "0" + Math.floor(this.state.time % 60) : Math.floor(this.state.time % 60)
+                                    }
+                                </span>
                             </div>
                             {
                                 this.state.previousPage ?
@@ -216,9 +214,13 @@ class Board extends Component {
                     </Aux>
                 )
             } else {
+                clearInterval(this.timer)
+
                 return (
                     <Aux>
-                        {this.getScore()}
+                        <Score
+                            restartGame={this.restartGame}
+                        />
                     </Aux>
                 )
             }

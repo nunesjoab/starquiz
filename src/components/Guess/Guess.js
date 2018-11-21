@@ -23,6 +23,12 @@ export default class Guess extends Component {
 		}
 	}
 
+	keyPressHandler = (key) => {
+		if (key === 'Enter') {
+			this.props.closeGuess()
+		}
+	}
+
 	renderBackButton() {
 		if (this.state.input === '') {
 			return (
@@ -47,6 +53,7 @@ export default class Guess extends Component {
 							value={this.state.input}
 							type="text"
 							onChange={(event) => this.setState({ input: event.target.value })}
+							onKeyPress={(event) => this.keyPressHandler(event.key)}
 						/>
 						<p>{this.props.name}</p>
 						<div className="button-container">

@@ -28,7 +28,7 @@
 	padding: 8px 16px;
 }
 
-input:focus {
+.guess-container input:focus {
     box-shadow: 1px 1px 1px dimgray;
 	outline: gold;
 }

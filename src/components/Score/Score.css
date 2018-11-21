@@ -1,0 +1,23 @@
+.container {
+	font-family: Roboto, Consolas;
+}
+
+.score span {
+	font-size: 48px;
+	font-weight: 600;
+}
+
+.player input {
+	border: 1px solid dimgray;
+	border-radius: 4px;
+	font-size: 18px;
+	font-weight: 500;
+	line-height: 26px;
+	height: 40px;
+	padding: 2px 4px;
+}
+
+.player input:focus {
+    box-shadow: 1px 1px 1px dimgray;
+	outline: black;
+}
