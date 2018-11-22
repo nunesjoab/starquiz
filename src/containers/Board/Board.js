@@ -73,7 +73,7 @@ class Board extends Component {
     }
 
     startTimer = () => {
-        this.setState({ time: 20 })
+        this.setState({ time: 60 })
 
         clearInterval(this.timer)
 
