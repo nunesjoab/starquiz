@@ -1,3 +1,7 @@
+## Instalação dos Scripts e módulos do NPM usados no projeto
+
+### `npm install`
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
