@@ -14,20 +14,24 @@ export default class Score extends Component {
 	}
 
 	componentDidMount() {
-		const score = JSON.parse(localStorage.getItem('points'))
+		const player = this.props.player
+		const score = JSON.parse(localStorage.getItem(player))
+		console.log(score)
 
-		const points = score[0].points * 10
+		const points = score.points * 10
 		this.setState({ points })
 	}
 
 	saveScoreHandler = () => {
+		const player = this.props.player
+
 		let points = {
 			'points': this.state.points / 10,
 			'player': this.state.player,
 			'email': this.state.email,
 		}
 
-		localStorage.setItem('points', JSON.stringify(points))
+		localStorage.setItem(player, JSON.stringify(points))
 		this.props.restartGame()
 	}
 

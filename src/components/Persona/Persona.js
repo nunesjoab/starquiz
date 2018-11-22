@@ -94,16 +94,16 @@ export default class Persona extends Component {
 
             const player = this.props.player
             let storedScore = localStorage.getItem(player)
-            let updatedPoints = []
-
+            
             storedScore = JSON.parse(storedScore)
-
-            console.log(storedScore[0].points)
+            let updatedPoints = ''
+            
+            console.log(updatedPoints)
             
             if (this.state.fullPoints) {
-                updatedPoints.push({ player: storedScore[0].points + 1})
+                updatedPoints = { points: storedScore.points + 1}
             } else {
-                updatedPoints.push({ player: storedScore[0].points + .5})
+                updatedPoints = { points: storedScore.points + .5}
             }
             
             console.log(updatedPoints)

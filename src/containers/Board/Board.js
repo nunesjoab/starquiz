@@ -30,9 +30,8 @@ class Board extends Component {
     componentDidMount() {
         localStorage.clear()
         const score = { 'points': 0 }
-        let points = []
-        points.push(score)
-        localStorage.setItem(this.state.playerId, JSON.stringify(points))
+
+        localStorage.setItem(this.state.playerId, JSON.stringify(score))
 
         axios.get('people/')
         .then(response => {
@@ -220,6 +219,7 @@ class Board extends Component {
                     <Aux>
                         <Score
                             restartGame={this.restartGame}
+                            player={this.state.playerId}
                         />
                     </Aux>
                 )
