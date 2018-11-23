@@ -60,7 +60,7 @@ export default class Score extends Component {
 					}}
 					onClick={() => this.saveScoreHandler()}
 				>
-					Salvar pontuação
+					Reinicar jogo
 				</button>
 	  		</div>
 		)
